@@ -12,7 +12,7 @@ export default async function handleAuth() {
     scope: import.meta.env.VITE_G_SCOPES,
   };
 
-  // Add form parametersas hidden input values.
+  // Add form parameters hidden input values.
   for (const p in params) {
     const input = document.createElement("input");
     input.setAttribute("type", "hidden");
@@ -25,6 +25,7 @@ export default async function handleAuth() {
   document.body.appendChild(form);
 
   try {
+    sessionStorage.setItem('authHasRun', 'true');
     form.submit();
   } catch (error) {
     console.error(error);
