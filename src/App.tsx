@@ -5,7 +5,7 @@ import setAuthToken from "./services/google-authentication/setAuthToken";
 import fetchUser from "./utils/fetchUser";
 
 function App() {
-  const [user, setUser] = useState<{ id: any; name: any; image: any }>();
+  const [user, setUser] = useState<Record<string, string> | undefined>();
   const [loading, setLoading] = useState(false);
 
   const authHasRun: string | null = sessionStorage.getItem("authHasRun");
