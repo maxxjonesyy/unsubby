@@ -1,9 +1,9 @@
-export default async function handleAuth() {
-  const oauth2Endpoint: string = "https://accounts.google.com/o/oauth2/v2/auth";
+import endpoints from "../../data/endpoints.json";
 
+export default async function handleAuth() {
   const form = document.createElement("form");
   form.setAttribute("method", "GET");
-  form.setAttribute("action", oauth2Endpoint);
+  form.setAttribute("action", endpoints.authentication);
 
   const params: Record<string, string> = {
     client_id: import.meta.env.VITE_G_CLIENT_ID,

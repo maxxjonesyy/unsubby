@@ -1,8 +1,8 @@
 import axios from "axios";
+import endpoints from '../data/endpoints.json'
 
 
 export default async function fetchUser(token : string) {
-    const url = "https://www.googleapis.com/oauth2/v3/userinfo";
     const headers = {
       Authorization: `Bearer ${token}`,
     };
@@ -11,7 +11,7 @@ export default async function fetchUser(token : string) {
         if(!token) {
             throw new Error('No token found');
         } else {
-            const response = await axios.get(url, {headers})
+            const response = await axios.get(endpoints.userInfo, {headers})
             if(response.status === 200) {
                 const { data } = response
 
