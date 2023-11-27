@@ -1,4 +1,5 @@
 {
     "authentication": "https://accounts.google.com/o/oauth2/v2/auth",
-    "userInfo": "https://www.googleapis.com/oauth2/v3/userinfo"
+    "userInfo": "https://www.googleapis.com/oauth2/v3/userinfo",
+    "messages": "https://gmail.googleapis.com/gmail/v1/users/me/messages/"
 }
