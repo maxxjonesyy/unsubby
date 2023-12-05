@@ -13,7 +13,9 @@ interface MessageObject {
   postUrl?: string;
 }
 
-const fetchMessages = async (token: string): Promise<MessageObject[]> => {
+export default async function fetchMessages(
+  token: string
+): Promise<MessageObject[]> {
   if (!token) {
     console.error("No token found");
     return [];
@@ -96,6 +98,4 @@ const fetchMessages = async (token: string): Promise<MessageObject[]> => {
   }
 
   return [];
-};
-
-export default fetchMessages;
+}
