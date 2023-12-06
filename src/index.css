@@ -7,3 +7,27 @@
 * {
     font-family: 'Lato', sans-serif;
 }
+
+html {
+    background-image: radial-gradient(circle at center, #0f172a, #020617);
+    color: #d1d5db;
+}
+
+body {
+    background-image: linear-gradient(to right, #69696912 1px, transparent 1px),
+    linear-gradient(to bottom, #69696912 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 50% 50% at 50% 50%,
+    #000000 50%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 80% 50% at 50% 50%,
+    #000 50%,
+    transparent 100%
+  );
+}
+
+      
+
