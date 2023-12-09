@@ -1,8 +1,15 @@
 import handleAuth from "../services/google-authentication/handleAuth";
-import Button from "../components/Button";
 import google from "../assets/icons/google.svg";
 
-function Login() {
+import Button from "../components/Button";
+import PrintError from "../components/PrintError";
+import { ErrorType } from "../types/types";
+
+interface LoginProps {
+  error?: ErrorType;
+}
+
+function Login({ error }: LoginProps): JSX.Element {
   return (
     <div className='h-screen w-full flex flex-col items-center justify-center gap-5'>
       <h1 className='font-black text-6xl bg-gradient-to-r from-violet-600 via-blue-600 to-violet-600 animate-text rounded-lg text-transparent shadow-lg bg-clip-text'>

@@ -6,8 +6,11 @@ import Home from "./views/Home";
 import setAuthToken from "./services/google-authentication/setAuthToken";
 import fetchUser from "./utils/fetchUser";
 
+import { ErrorType, UserType } from "./types/types";
+
 function App() {
-  const [user, setUser] = useState<Record<string, string> | undefined>();
+  const [user, setUser] = useState<UserType>();
+  const [error, setError] = useState<ErrorType>();
 
   useEffect(() => {
     const authHasRun: string | undefined =
@@ -27,6 +30,7 @@ function App() {
           }
         }
       } catch (error) {
+        setError(error as ErrorType);
         console.error("Error during setup:", error);
       }
     }
@@ -34,7 +38,7 @@ function App() {
     setup();
   }, []);
 
-  return <>{user ? <Home user={user} /> : <Login />}</>;
+  return <>{user ? <Home user={user} /> : <Login error={error} />}</>;
 }
 
 export default App;

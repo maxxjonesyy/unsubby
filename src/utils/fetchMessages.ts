@@ -2,20 +2,15 @@ import axios from "axios";
 import endpoints from "../data/endpoints.json";
 import checkUnsubUrl from "./checkUnsubUrl";
 
+import { MessageObjectType } from "../types/types";
+
 interface Message {
   id: string;
 }
 
-interface MessageObject {
-  id?: string;
-  name?: string;
-  webUrl?: string;
-  postUrl?: string;
-}
-
 export default async function fetchMessages(
   token: string
-): Promise<MessageObject[]> {
+): Promise<MessageObjectType[]> {
   if (!token) {
     console.error("No token found");
     return [];
@@ -40,18 +35,18 @@ export default async function fetchMessages(
         const idArray: string[] = messages.map(
           (message: Message) => message.id
         );
-        const messageArray: MessageObject[] = [];
+        const messageArray: MessageObjectType[] = [];
 
         async function getMessage(
           id: string
-        ): Promise<MessageObject | undefined> {
+        ): Promise<MessageObjectType | undefined> {
           const response = await axios.get(endpoints.messages + id, {
             headers,
           });
 
           if (response.status === 200 && response.data) {
             const { headers } = response.data.payload;
-            const messageObject: MessageObject = {};
+            const messageObject: MessageObjectType = {};
 
             headers.forEach(
               ({ name, value }: { name: string; value: string }) => {
