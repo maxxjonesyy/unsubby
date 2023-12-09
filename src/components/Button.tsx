@@ -10,7 +10,7 @@ const Button: React.FC<ButtonProps> = ({ onClick, text, icon }) => {
       <button
         onClick={onClick}
         className='rounded-md p-2 flex items-center justify-center gap-3 hover:px-6 transition-all bg-[#0f172a]'>
-        {icon ? <img src={icon} alt={text} className='w-5 h-5' /> : null}
+        {icon ? <img src={icon} alt={text} className='w-5' /> : null}
         {text}
       </button>
     </div>
