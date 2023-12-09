@@ -11,6 +11,7 @@ function Login() {
       <h2 className='text-lg text-center shadow-md'>
         A simple solution to managing your Gmail subscriptions.
       </h2>
+      {error?.message && <PrintError error={error} />}
       <Button onClick={handleAuth} text={"Login with Google"} icon={google} />
     </div>
   );
