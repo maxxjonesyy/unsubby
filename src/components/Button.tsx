@@ -9,7 +9,7 @@ const Button: React.FC<ButtonProps> = ({ onClick, text, icon }) => {
     <div className='bg-gradient-to-r from-violet-600 via-blue-600 to-violet-600 animate-text rounded-lg p-[2px]'>
       <button
         onClick={onClick}
-        className='rounded-md p-2 flex items-center justify-center gap-3 hover:px-6 transition-all bg-[#0f172a]'>
+        className='rounded-md p-2 flex items-center justify-center gap-3 hover:px-6 transition-all bg-[#0f172a] w-full'>
         {icon ? <img src={icon} alt={text} className='w-5' /> : null}
         {text}
       </button>
