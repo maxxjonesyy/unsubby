@@ -16,16 +16,16 @@ html {
 body {
     background-image: linear-gradient(to right, #69696912 1px, transparent 1px),
     linear-gradient(to bottom, #69696912 1px, transparent 1px);
-  background-size: 24px 24px;
+  background-size: 28px 28px;
+  mask-image: radial-gradient(
+    ellipse 50% 50% at 50% 50%,
+    #000 50%,
+    transparent 200%
+  );
   -webkit-mask-image: radial-gradient(
     ellipse 50% 50% at 50% 50%,
     #000000 50%,
-    transparent 100%
-  );
-  mask-image: radial-gradient(
-    ellipse 80% 50% at 50% 50%,
-    #000 50%,
-    transparent 100%
+    transparent 200%
   );
 }
 
