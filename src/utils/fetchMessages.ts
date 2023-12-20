@@ -76,10 +76,13 @@ export default async function fetchMessages(
         }
 
         async function processMessages(idArray: string[]): Promise<void> {
+          let exists: Array<string> = [];
+
           for (const id of idArray) {
             const message = await getMessage(id);
 
-            if (message) {
+            if (message?.name && !exists.includes(message.name)) {
+              exists.push(message.name);
               messageArray.push(message);
             }
           }
