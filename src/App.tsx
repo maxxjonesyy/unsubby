@@ -11,6 +11,7 @@ import { ErrorType, UserType } from "./types/types";
 function App() {
   const [user, setUser] = useState<UserType>();
   const [error, setError] = useState<ErrorType>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const authHasRun: string | undefined =
@@ -20,6 +21,7 @@ function App() {
       sessionStorage.getItem("token") ?? undefined;
 
     async function setup() {
+      setLoading(true);
       try {
         if (authHasRun && !token) {
           setAuthToken();
@@ -32,13 +34,19 @@ function App() {
       } catch (error) {
         setError(error as ErrorType);
         console.error("Error during setup:", error);
+      } finally {
+        setLoading(false);
       }
     }
 
     setup();
   }, []);
 
-  return <>{user ? <Home user={user} /> : <Login error={error} />}</>;
+  return (
+    <>
+      {user ? <Home user={user} /> : <Login error={error} loading={loading} />}
+    </>
+  );
 }
 
 export default App;
