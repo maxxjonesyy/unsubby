@@ -23,7 +23,7 @@ const Button: React.FC<ButtonProps> = ({
         ) : (
           icon && <img src={icon} alt={text} className='w-5' />
         )}
-        <span className='text-lg'>{loading ? "Fetching..." : `${text}`}</span>
+        <span className='text-lg'>{loading ? "Loading..." : `${text}`}</span>
       </button>
     </div>
   );
