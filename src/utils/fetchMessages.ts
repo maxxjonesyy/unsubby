@@ -21,7 +21,7 @@ export default async function fetchMessages(
   };
 
   const params = {
-    maxResults: 3,
+    maxResults: 10,
     q: "Unsubscribe",
   };
 
@@ -56,19 +56,20 @@ export default async function fetchMessages(
                   messageObject["name"] = value;
                 } else if (name === "List-Unsubscribe") {
                   const urlObject = checkUnsubUrl(value);
+
                   if (urlObject) {
                     urlObject.https.length > 0
-                      ? (messageObject["webUrl"] = value)
+                      ? (messageObject["webUrl"] = urlObject.https[0])
                       : null;
                     urlObject.mailto.length > 0
-                      ? (messageObject["postUrl"] = value)
+                      ? (messageObject["postUrl"] = urlObject.mailto[0])
                       : null;
                   }
                 }
               }
             );
 
-            if (Object.keys(messageObject).length > 2) {
+            if (messageObject.webUrl || messageObject.postUrl) {
               return messageObject;
             }
           }
