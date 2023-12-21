@@ -10,7 +10,8 @@
 
 html {
     background-image: radial-gradient(circle at center, #0f172a, #020617);
-    color: #d1d5db;
+    background-color: #020617;
+    color: white;  
 }
 
 body {
