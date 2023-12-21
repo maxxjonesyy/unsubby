@@ -44,7 +44,11 @@ function App() {
 
   return (
     <>
-      {user ? <Home user={user} /> : <Login error={error} loading={loading} />}
+      {user ? (
+        <Home user={user} />
+      ) : (
+        <Login error={error} loading={loading} setLoading={setLoading} />
+      )}
     </>
   );
 }
