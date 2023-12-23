@@ -31,5 +31,51 @@ body {
   );
 }
 
+.hide-question {
+  height: 0px;
+  top: 500px;
+  transition: all 0.3s ease-in-out;
+}
+
+.show-question { 
+  padding: 0.75rem;
+  transition: all 0.3s ease-in-out;
+  animation-name: showQuestion;
+  animation-duration: 0.3s;
+}
+
+@keyframes showQuestion {
+  0% {
+    opacity: 0;
+    height: 0px;
+    top: 500px;
+  }
+
+  100% {
+    opacity: 1;
+    height: 100%;
+    top: 0;
+  }
+}
+
+.menu-active {
+  border-bottom: 2px solid #7c3aed;
+  border-radius: 1px;
+  width: 60px;
+  padding-bottom: 5px;
+  animation-name: animateBorder;
+  animation-duration: 0.4s;
+}
+
+@keyframes animateBorder {
+  0% {
+    width: 0px;
+  }
+   
+  100% {
+    width: 60px;
+  }
+}
+
       
 
