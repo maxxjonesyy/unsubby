@@ -21,7 +21,7 @@ const Button: React.FC<ButtonProps> = ({
         {loading ? (
           <Loader />
         ) : (
-          icon && <img src={icon} alt={text} className='w-5' />
+          icon && <img src={icon} alt='google' className='w-5 h-5' />
         )}
         <span className='text-lg'>{loading ? "Loading..." : `${text}`}</span>
       </button>
