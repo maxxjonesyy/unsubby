@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import endpoints from "../data/endpoints.json";
 import checkUnsubUrl from "./checkUnsubUrl";
 
@@ -8,9 +8,51 @@ interface Message {
   id: string;
 }
 
-export default async function fetchMessages(
-  token: string
-): Promise<MessageObjectType[]> {
+interface MessageHeader {
+  name: string;
+  value: string;
+}
+
+async function getMessage(
+  id: string,
+  headers: Record<string, string>
+): Promise<MessageObjectType | undefined> {
+  try {
+    const response = await axios.get(endpoints.messages + id, { headers });
+
+    if (response.status === 200 && response.data) {
+      const { payload, id: messageId } = response.data;
+      const { headers } = payload;
+
+      const messageObject: MessageObjectType = { id: messageId };
+
+      headers.forEach(({ name, value }: MessageHeader) => {
+        if (name === "From") {
+          messageObject.name = value;
+        } else if (name === "List-Unsubscribe") {
+          const urlObject = checkUnsubUrl(value);
+
+          if (urlObject) {
+            if (urlObject.https.length > 0)
+              messageObject.webUrl = urlObject.https[0];
+            if (urlObject.mailto.length > 0)
+              messageObject.postUrl = urlObject.mailto[0];
+          }
+        }
+      });
+
+      if (messageObject.webUrl) {
+        return messageObject;
+      }
+    }
+  } catch (error) {
+    console.error(`Error fetching message with ID ${id}: ${error}`);
+  }
+}
+
+async function fetchMessages(token: string): Promise<MessageObjectType[]> {
+  const maxResults = 20;
+
   if (!token) {
     console.error("No token found");
     return [];
@@ -21,80 +63,53 @@ export default async function fetchMessages(
   };
 
   const params = {
-    maxResults: 10,
+    maxResults: maxResults,
     q: "Unsubscribe",
   };
 
   try {
-    const response = await axios.get(endpoints.messages, { headers, params });
-
-    if (response.status === 200 && response.data) {
-      const { messages } = response.data;
-
-      if (messages) {
-        const idArray: string[] = messages.map(
-          (message: Message) => message.id
-        );
-        const messageArray: MessageObjectType[] = [];
-
-        async function getMessage(
-          id: string
-        ): Promise<MessageObjectType | undefined> {
-          const response = await axios.get(endpoints.messages + id, {
-            headers,
-          });
-
-          if (response.status === 200 && response.data) {
-            const { headers } = response.data.payload;
-            const messageObject: MessageObjectType = {};
-
-            headers.forEach(
-              ({ name, value }: { name: string; value: string }) => {
-                messageObject["id"] = response.data.id;
-
-                if (name === "From") {
-                  messageObject["name"] = value;
-                } else if (name === "List-Unsubscribe") {
-                  const urlObject = checkUnsubUrl(value);
-
-                  if (urlObject) {
-                    urlObject.https.length > 0
-                      ? (messageObject["webUrl"] = urlObject.https[0])
-                      : null;
-                    urlObject.mailto.length > 0
-                      ? (messageObject["postUrl"] = urlObject.mailto[0])
-                      : null;
-                  }
-                }
-              }
-            );
-
-            if (messageObject.webUrl || messageObject.postUrl) {
-              return messageObject;
-            }
-          }
-        }
-
-        async function processMessages(idArray: string[]): Promise<void> {
-          let exists: Array<string> = [];
-
-          for (const id of idArray) {
-            const message = await getMessage(id);
-
-            if (message?.name && !exists.includes(message.name)) {
-              exists.push(message.name);
-              messageArray.push(message);
-            }
-          }
-        }
-
-        await processMessages(idArray);
-        return messageArray;
+    const response: AxiosResponse<{ messages?: Message[] }> = await axios.get(
+      endpoints.messages,
+      {
+        headers,
+        params,
       }
+    );
+
+    if (response.status === 200 && response.data && response.data.messages) {
+      const { messages } = response.data;
+      const idArray: string[] = messages.map((message: Message) => message.id);
+      const messageArray: MessageObjectType[] = await processMessages(
+        idArray,
+        headers
+      );
+      return messageArray;
     }
   } catch (error) {
+    console.error(`Error fetching messages: ${error}`);
     throw new Error(`${error}`);
   }
 
   return [];
 }
+
+async function processMessages(
+  idArray: string[],
+  headers: Record<string, string>
+): Promise<MessageObjectType[]> {
+  const exists: Set<string> = new Set();
+  const messageArray: MessageObjectType[] = [];
+
+  for (const id of idArray) {
+    const message = await getMessage(id, headers);
+
+    if (message?.name && !exists.has(message.name)) {
+      exists.add(message.name);
+      messageArray.push(message);
+    }
+  }
+
+  return messageArray;
+}
+
+export default fetchMessages;
