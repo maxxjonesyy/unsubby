@@ -184,8 +184,10 @@ function Home({ user }: HomeProps) {
 
                   <th className='p-3'>
                     <div>
-                      <p>{name}</p>
-                      <p className='text-xs opacity-90'>{email}</p>
+                      <p className='text-sm md:text-base'>{name}</p>
+                      <p className='hidden md:block text-xs opacity-90'>
+                        {email}
+                      </p>
                     </div>
                   </th>
 
