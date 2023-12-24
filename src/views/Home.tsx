@@ -3,6 +3,7 @@ import fetchMessages from "../utils/fetchMessages";
 import deleteMessages from "../utils/deleteMessages";
 import logoutUser from "../utils/logoutUser";
 import renderAlert from "../utils/renderAlert";
+import Swal from "sweetalert2";
 
 import Button from "../components/Button";
 
@@ -10,6 +11,10 @@ import { UserType, MessageObjectType } from "../types/types";
 
 interface HomeProps {
   user: UserType;
+}
+
+interface DeleteResult {
+  isConfirmed: boolean;
 }
 
 function Home({ user }: HomeProps) {
@@ -30,10 +35,6 @@ function Home({ user }: HomeProps) {
       renderAlert("error", `There was an error fetching messages: ${error}`);
     } finally {
       setLoading(false);
-
-      if (messages && messages.length > 0) {
-        document.getElementById("home")?.classList.remove("h-screen");
-      }
     }
   }
 
@@ -65,15 +66,35 @@ function Home({ user }: HomeProps) {
   }
 
   async function batchDelete() {
-    try {
-      const response = await deleteMessages(checkedIds, token);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This will remove all selected emails from your inbox",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, you can remove them!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDelete(result);
+      }
+    });
+  }
 
-      if (response === "") {
-        setMessages(
-          messages?.filter((message) => !checkedIds.includes(message.id ?? ""))
-        );
-        setCheckedIds([]);
-        renderAlert("success", "Messages have been cleaned from your inbox!");
+  async function handleDelete(result: DeleteResult) {
+    try {
+      if (result.isConfirmed) {
+        const response = await deleteMessages(checkedIds, token);
+
+        if (response === "") {
+          setMessages(
+            messages?.filter(
+              (message) => !checkedIds.includes(message.id ?? "")
+            )
+          );
+          setCheckedIds([]);
+          renderAlert("success", "Successfully removed emails!");
+        }
       }
     } catch (error) {
       renderAlert(
@@ -86,7 +107,7 @@ function Home({ user }: HomeProps) {
   return (
     <div
       id='home'
-      className='relative h-screen py-10 px-5 w-full flex flex-col gap-5 items-center justify-center'>
+      className='relative min-h-screen py-10 px-5 w-full flex flex-col gap-5 items-center justify-center'>
       <div className='flex items-center gap-5'>
         <img
           src={user.image}
@@ -95,26 +116,32 @@ function Home({ user }: HomeProps) {
         />
       </div>
 
-      <Button
-        onClick={handleFetchMessages}
-        text={
-          messages
-            ? `Total subscriptions: ${messages.length}`
-            : "Get subscriptions"
-        }
-        loading={loading}
-      />
+      <p className='text-lg'>
+        Welcome <span className='font-bold'>{user.name.split(" ")[0]}</span>
+      </p>
 
-      <div className='absolute top-5 right-5'>
-        <Button onClick={logoutUser} text='Logout' />
-      </div>
+      {messages && messages.length > 0 && (
+        <p className='border p-2 rounded-md'>
+          Subscriptions found: {messages.length}
+        </p>
+      )}
 
-      {checkedIds.length > 0 && (
+      {checkedIds.length > 0 ? (
         <Button
           onClick={batchDelete}
           text={`Delete selected: ${checkedIds.length}`}
         />
+      ) : (
+        <Button
+          onClick={handleFetchMessages}
+          text='Get subscriptions'
+          loading={loading}
+        />
       )}
+
+      <div className='absolute top-5 right-5'>
+        <Button onClick={logoutUser} text='Logout' />
+      </div>
 
       {messages && messages.length > 0 && (
         <table className='w-full transition-all lg:w-2/3 lg:max-w-[1000px]'>
