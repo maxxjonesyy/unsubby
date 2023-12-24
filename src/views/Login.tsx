@@ -4,17 +4,14 @@ import google from "../assets/icons/google.svg";
 import faq from "../data/faq.ts";
 
 import Button from "../components/Button";
-import PrintError from "../components/PrintError";
-import { ErrorType } from "../types/types";
 import expandableArrow from "../assets/icons/expandable-arrow.svg";
 
 interface LoginProps {
-  error?: ErrorType;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function Login({ error, loading, setLoading }: LoginProps): JSX.Element {
+function Login({ loading, setLoading }: LoginProps): JSX.Element {
   const [showInfo, setShowInfo] = useState(false);
 
   function handleMenuChange(menuName: string) {
@@ -67,7 +64,7 @@ function Login({ error, loading, setLoading }: LoginProps): JSX.Element {
           <h2 className='text-lg text-center shadow-md'>
             A simple solution to managing your Gmail subscriptions.
           </h2>
-          {error?.message && <PrintError error={error} />}
+
           <Button
             onClick={() => {
               setLoading(true);
