@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import endpoints from "../data/endpoints.json";
 import checkUnsubUrl from "./checkUnsubUrl";
+import renderAlert from "./renderAlert";
 
 import { MessageObjectType } from "../types/types";
 
@@ -46,15 +47,18 @@ async function getMessage(
       }
     }
   } catch (error) {
-    console.error(`Error fetching message with ID ${id}: ${error}`);
+    renderAlert(
+      "error",
+      `There was an error fetching the messade ID, ${error}`
+    );
   }
 }
 
 async function fetchMessages(token: string): Promise<MessageObjectType[]> {
-  const maxResults = 20;
+  const maxResults = 10;
 
   if (!token) {
-    console.error("No token found");
+    renderAlert("error", "No Token found");
     return [];
   }
 
@@ -86,8 +90,7 @@ async function fetchMessages(token: string): Promise<MessageObjectType[]> {
       return messageArray;
     }
   } catch (error) {
-    console.error(`Error fetching messages: ${error}`);
-    throw new Error(`${error}`);
+    renderAlert("error", `Error fetching messages: ${error}`);
   }
 
   return [];
