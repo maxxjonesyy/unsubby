@@ -82,6 +82,7 @@ function Home({ user }: HomeProps) {
   }
 
   async function handleDelete(result: DeleteResult) {
+    setLoading(true);
     try {
       if (result.isConfirmed) {
         const response = await deleteMessages(checkedIds, token);
@@ -101,6 +102,8 @@ function Home({ user }: HomeProps) {
         "error",
         `There was an error deleting your messages: ${error}`
       );
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -130,6 +133,7 @@ function Home({ user }: HomeProps) {
         <Button
           onClick={batchDelete}
           text={`Delete selected: ${checkedIds.length}`}
+          loading={loading}
         />
       ) : (
         <Button
