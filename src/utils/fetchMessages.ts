@@ -55,7 +55,7 @@ async function getMessage(
 }
 
 async function fetchMessages(token: string): Promise<MessageObjectType[]> {
-  const maxResults = 10;
+  const maxResults = 50;
 
   if (!token) {
     renderAlert("error", "No Token found");
