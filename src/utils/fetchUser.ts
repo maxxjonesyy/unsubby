@@ -1,9 +1,10 @@
 import axios from "axios";
 import endpoints from "../data/endpoints.json";
+import renderAlert from "./renderAlert";
 
 export default async function fetchUser(token: string) {
   if (!token) {
-    console.error("No token found");
+    renderAlert("error", "No token found");
     return;
   }
 
@@ -25,7 +26,7 @@ export default async function fetchUser(token: string) {
       return userData;
     }
   } catch (error) {
-    console.error("Error fetching user:", error);
+    renderAlert("error", `Error fetching user: ${error}`);
   }
 
   return;

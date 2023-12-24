@@ -5,12 +5,12 @@ import Home from "./views/Home";
 
 import setAuthToken from "./services/google-authentication/setAuthToken";
 import fetchUser from "./utils/fetchUser";
+import renderAlert from "./utils/renderAlert";
 
-import { ErrorType, UserType } from "./types/types";
+import { UserType } from "./types/types";
 
 function App() {
   const [user, setUser] = useState<UserType>();
-  const [error, setError] = useState<ErrorType>();
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -32,8 +32,7 @@ function App() {
           }
         }
       } catch (error) {
-        setError(error as ErrorType);
-        console.error("Error during setup:", error);
+        renderAlert("error", `There was an error during setup: ${error}`);
       } finally {
         setLoading(false);
       }
@@ -47,7 +46,7 @@ function App() {
       {user ? (
         <Home user={user} />
       ) : (
-        <Login error={error} loading={loading} setLoading={setLoading} />
+        <Login loading={loading} setLoading={setLoading} />
       )}
     </>
   );

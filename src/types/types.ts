@@ -1,7 +1,3 @@
-export type ErrorType = {
-  message: string;
-};
-
 export type UserType = {
   id: string;
   image: string;
