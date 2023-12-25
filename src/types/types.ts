@@ -5,8 +5,7 @@ export type UserType = {
 };
 
 export type MessageObjectType = {
-  id?: string;
+  id: string;
   name?: string;
   webUrl?: string;
-  postUrl?: string;
 };
