@@ -27,7 +27,6 @@ function Home({ user }: HomeProps) {
     setLoading(true);
     try {
       const messages = await fetchMessages(token);
-
       if (messages) {
         setMessages(messages);
       }
