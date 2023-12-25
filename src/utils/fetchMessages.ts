@@ -1,116 +1,84 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import endpoints from "../data/endpoints.json";
-import checkUnsubUrl from "./checkUnsubUrl";
+import formatLink from "./formatLink.ts";
 import renderAlert from "./renderAlert";
+import getHeaders from "./getHeaders.ts";
 
 import { MessageObjectType } from "../types/types";
 
-interface Message {
-  id: string;
-}
+async function fetchMessageIDs(token: string) {
+  const MAX_RESULTS = 5;
+  const QUERY_STRING = "Unsubscribe";
 
-interface MessageHeader {
-  name: string;
-  value: string;
-}
+  const headers = getHeaders(token);
 
-async function getMessage(
-  id: string,
-  headers: Record<string, string>
-): Promise<MessageObjectType | undefined> {
+  const params = {
+    maxResults: MAX_RESULTS,
+    q: QUERY_STRING,
+  };
+
   try {
-    const response = await axios.get(endpoints.messages + id, { headers });
+    const response = await axios.get(endpoints.messages, { headers, params });
 
-    if (response.status === 200 && response.data) {
-      const { payload, id: messageId } = response.data;
-      const { headers } = payload;
-
-      const messageObject: MessageObjectType = { id: messageId };
-
-      headers.forEach(({ name, value }: MessageHeader) => {
-        if (name === "From") {
-          messageObject.name = value;
-        } else if (name === "List-Unsubscribe") {
-          const urlObject = checkUnsubUrl(value);
-
-          if (urlObject) {
-            if (urlObject.https.length > 0)
-              messageObject.webUrl = urlObject.https[0];
-            if (urlObject.mailto.length > 0)
-              messageObject.postUrl = urlObject.mailto[0];
-          }
-        }
-      });
-
-      if (messageObject.webUrl) {
-        return messageObject;
-      }
+    if (response.status === 200 && response.data.messages) {
+      const { messages } = response.data;
+      return messages.map((message: { id: string }) => message.id);
     }
   } catch (error) {
-    renderAlert(
-      "error",
-      `There was an error fetching the messade ID, ${error}`
-    );
+    renderAlert("error", `There was an error fetching message ids: ${error}`);
+    console.error("error", `There was an error fetching message ids: ${error}`);
   }
 }
 
-async function fetchMessages(token: string): Promise<MessageObjectType[]> {
-  const maxResults = 50;
+async function fetchMessages(token: string) {
+  const messageIdArray = await fetchMessageIDs(token);
 
-  if (!token) {
-    renderAlert("error", "No Token found");
+  const headers = getHeaders(token);
+
+  if (messageIdArray.length === 0) {
+    renderAlert("error", "No messages found");
+    console.error("error", "No messages found");
     return [];
   }
 
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
-
-  const params = {
-    maxResults: maxResults,
-    q: "Unsubscribe",
-  };
-
-  try {
-    const response: AxiosResponse<{ messages?: Message[] }> = await axios.get(
-      endpoints.messages,
-      {
+  const messagePromises = messageIdArray.map(async (messageId: string) => {
+    try {
+      const response = await axios.get(endpoints.messages + messageId, {
         headers,
-        params,
+      });
+
+      if (response.status === 200 && response.data) {
+        const { payload, id } = response.data;
+        const { headers } = payload;
+
+        const tempObject: MessageObjectType = { id: id };
+
+        headers.find((item: { name: string; value: string }) => {
+          if (item.name === "From") {
+            tempObject.name = item.value;
+          } else if (item.name === "List-Unsubscribe") {
+            const cleanLink = formatLink(item.value);
+
+            tempObject.webUrl = cleanLink?.https[0];
+          }
+        });
+
+        return tempObject;
       }
-    );
-
-    if (response.status === 200 && response.data && response.data.messages) {
-      const { messages } = response.data;
-      const idArray: string[] = messages.map((message: Message) => message.id);
-      const messageArray: MessageObjectType[] = await processMessages(
-        idArray,
-        headers
-      );
-      return messageArray;
+    } catch (error) {
+      renderAlert("error", `There was an error fetching messages: ${error}`);
+      console.error("error", `There was an error fetching messages: ${error}`);
     }
-  } catch (error) {
-    renderAlert("error", `Error fetching messages: ${error}`);
-  }
+  });
 
-  return [];
-}
-
-async function processMessages(
-  idArray: string[],
-  headers: Record<string, string>
-): Promise<MessageObjectType[]> {
   const exists: Set<string> = new Set();
-  const messageArray: MessageObjectType[] = [];
 
-  for (const id of idArray) {
-    const message = await getMessage(id, headers);
-
-    if (message?.name && !exists.has(message.name)) {
-      exists.add(message.name);
-      messageArray.push(message);
+  const messageArray = (await Promise.all(messagePromises)).filter((item) => {
+    if (!exists.has(item.name) && item.webUrl && item !== undefined) {
+      exists.add(item.name);
+      return item;
     }
-  }
+  });
 
   return messageArray;
 }
