@@ -6,6 +6,7 @@ import getHeaders from "./getHeaders";
 export default async function fetchUser(token: string) {
   if (!token) {
     renderAlert("error", "No token found");
+    console.error("error", "No token found");
     return;
   }
 
@@ -26,6 +27,7 @@ export default async function fetchUser(token: string) {
     }
   } catch (error) {
     renderAlert("error", `Error fetching user: ${error}`);
+    console.error("error", `Error fetching user: ${error}`);
   }
 
   return;

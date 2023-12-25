@@ -33,6 +33,7 @@ function App() {
         }
       } catch (error) {
         renderAlert("error", `There was an error during setup: ${error}`);
+        console.error("error", `There was an error during setup: ${error}`);
       } finally {
         setLoading(false);
       }

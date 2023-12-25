@@ -32,6 +32,7 @@ function Home({ user }: HomeProps) {
       }
     } catch (error) {
       renderAlert("error", `There was an error fetching messages: ${error}`);
+      console.error("error", `There was an error fetching messages: ${error}`);
     } finally {
       setLoading(false);
     }
@@ -98,6 +99,10 @@ function Home({ user }: HomeProps) {
       }
     } catch (error) {
       renderAlert(
+        "error",
+        `There was an error deleting your messages: ${error}`
+      );
+      console.error(
         "error",
         `There was an error deleting your messages: ${error}`
       );
