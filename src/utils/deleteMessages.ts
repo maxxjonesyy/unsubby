@@ -1,14 +1,13 @@
 import axios from "axios";
 import { batchDelete } from "../data/endpoints.json";
 import renderAlert from "./renderAlert";
+import getHeaders from "./getHeaders";
 
 export default async function deleteMessages(
   messageIdArray: string[],
   token: string
 ) {
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
+  const headers = getHeaders(token);
 
   if (messageIdArray.length === 0) {
     renderAlert("error", "No messages to delete");

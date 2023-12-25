@@ -1,6 +1,7 @@
 import axios from "axios";
 import endpoints from "../data/endpoints.json";
 import renderAlert from "./renderAlert";
+import getHeaders from "./getHeaders";
 
 export default async function fetchUser(token: string) {
   if (!token) {
@@ -8,9 +9,7 @@ export default async function fetchUser(token: string) {
     return;
   }
 
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
+  const headers = getHeaders(token);
 
   try {
     const response = await axios.get(endpoints.userInfo, { headers });
