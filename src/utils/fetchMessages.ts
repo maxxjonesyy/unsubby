@@ -7,7 +7,7 @@ import getHeaders from "./getHeaders.ts";
 import { MessageObjectType } from "../types/types";
 
 async function fetchMessageIDs(token: string) {
-  const MAX_RESULTS = 5;
+  const MAX_RESULTS = 400;
   const QUERY_STRING = "Unsubscribe";
 
   const headers = getHeaders(token);
