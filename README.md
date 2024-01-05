@@ -1,30 +1,21 @@
-# React + TypeScript + Vite
+# Unsubby
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Unsubby groups together unsubscribe links for Gmail, making it easy for you to identify and remove subscribed emails with just a few clicks.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
+If you would like to setup your own version of this project, simply `fork the project and add your keys in the .env file as follows:`
 
 ```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+VITE_G_CLIENT_ID = // Google Client ID;
+VITE_REDIRECT_URI = // Redirect URI for Google Auth;
+VITE_G_SCOPES = // Scopes you would like to access;
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Tech Used 💻
+* Typescript
+* React 
+* TailwindCSS
+* SweetAlert2
+
+## Screenshots
+<img src="https://github.com/maxxjonesyy/unsubby_ts/assets/73814371/d2dc7bb6-eb1a-4dec-a85a-370b82f04946" width="550px">
+
