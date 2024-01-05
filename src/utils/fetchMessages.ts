@@ -74,8 +74,10 @@ async function fetchMessages(token: string) {
   const exists: Set<string> = new Set();
 
   const messageArray = (await Promise.all(messagePromises)).filter((item) => {
-    if (!exists.has(item.name) && item.webUrl && item !== undefined) {
-      exists.add(item.name);
+    const email = item.name?.split("<")[1].slice(0, -1).toLowerCase();
+
+    if (!exists.has(email) && item.webUrl && item !== undefined) {
+      exists.add(email);
       return item;
     }
   });
