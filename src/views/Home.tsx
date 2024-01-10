@@ -1,16 +1,16 @@
 import { useState } from "react";
 import fetchMessages from "../utils/fetchMessages";
 import deleteMessages from "../utils/deleteMessages";
-import logoutUser from "../utils/logoutUser";
 import renderAlert from "../utils/renderAlert";
 import Swal from "sweetalert2";
 
 import Button from "../components/Button";
 
-import { UserType, MessageObjectType } from "../types/types";
+import { MessageObjectType } from "../types/types";
+import { handleLogout } from "../services/supabase/supabase";
 
 interface HomeProps {
-  user: UserType;
+  user: any;
 }
 
 interface DeleteResult {
@@ -21,12 +21,16 @@ function Home({ user }: HomeProps) {
   const [messages, setMessages] = useState<MessageObjectType[]>();
   const [checkedIds, setCheckedIds] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const { token } = sessionStorage;
+  const { token } = localStorage;
 
   async function handleFetchMessages() {
     setLoading(true);
     try {
-      const messages = await fetchMessages(token);
+      const messages = await fetchMessages(
+        token,
+        user.user_metadata.provider_id
+      );
+
       if (messages) {
         setMessages(messages);
       }
@@ -85,7 +89,11 @@ function Home({ user }: HomeProps) {
     setLoading(true);
     try {
       if (result.isConfirmed) {
-        const response = await deleteMessages(checkedIds, token);
+        const response = await deleteMessages(
+          checkedIds,
+          token,
+          user.user_metadata.provider_id
+        );
 
         if (response === "") {
           setMessages(
@@ -117,14 +125,17 @@ function Home({ user }: HomeProps) {
       className='relative min-h-screen py-10 px-5 w-full flex flex-col gap-5 items-center justify-center'>
       <div className='flex items-center gap-5'>
         <img
-          src={user.image}
+          src={user?.user_metadata.picture}
           alt='user'
           className='rounded-full w-20 shadow-lg border border-slate-500'
         />
       </div>
 
       <p className='text-lg'>
-        Welcome <span className='font-bold'>{user.name.split(" ")[0]}</span>
+        Welcome{" "}
+        <span className='font-bold'>
+          {user?.user_metadata.full_name.split(" ")[0]}
+        </span>
       </p>
 
       {messages && messages.length > 0 && (
@@ -148,7 +159,7 @@ function Home({ user }: HomeProps) {
       )}
 
       <div className='absolute top-5 right-5'>
-        <Button onClick={logoutUser} text='Logout' />
+        <Button onClick={handleLogout} text='Logout' />
       </div>
 
       {messages && messages.length > 0 && (

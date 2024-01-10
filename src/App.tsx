@@ -1,54 +1,43 @@
 import { useEffect, useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { supabase } from "./services/supabase/supabase";
+import renderAlert from "./utils/renderAlert";
 
 import Login from "./views/Login";
 import Home from "./views/Home";
 
-import setAuthToken from "./services/google-authentication/setAuthToken";
-import fetchUser from "./utils/fetchUser";
-import renderAlert from "./utils/renderAlert";
-
-import { UserType } from "./types/types";
-
 function App() {
-  const [user, setUser] = useState<UserType>();
+  const user = JSON.parse(localStorage.getItem("user") as string);
   const [loading, setLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const authHasRun: string | undefined =
-      sessionStorage.getItem("authHasRun") ?? undefined;
-
-    const token: string | undefined =
-      sessionStorage.getItem("token") ?? undefined;
-
-    async function setup() {
-      setLoading(true);
-      try {
-        if (authHasRun && !token) {
-          setAuthToken();
-        } else if (authHasRun && token && !user) {
-          const userData = await fetchUser(token);
-          if (userData) {
-            setUser(userData);
-          }
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === "SIGNED_IN") {
+        if (session) {
+          localStorage.setItem("token", session?.provider_token as string);
+          localStorage.setItem("user", JSON.stringify(session?.user));
+        } else {
+          renderAlert("error", "Error logging in");
         }
-      } catch (error) {
-        renderAlert("error", `There was an error during setup: ${error}`);
-        console.error("error", `There was an error during setup: ${error}`);
-      } finally {
-        setLoading(false);
-      }
-    }
 
-    setup();
-  }, []);
+        navigate("/home");
+      } else if (event === "SIGNED_OUT" || !user) {
+        localStorage.clear();
+        navigate("/");
+      }
+    });
+  }, [user, navigate]);
 
   return (
     <>
-      {user ? (
-        <Home user={user} />
-      ) : (
-        <Login loading={loading} setLoading={setLoading} />
-      )}
+      <Routes>
+        <Route
+          path={"/"}
+          element={<Login loading={loading} setLoading={setLoading} />}
+        />
+        <Route path={"/home"} element={<Home user={user} />} />
+      </Routes>
     </>
   );
 }

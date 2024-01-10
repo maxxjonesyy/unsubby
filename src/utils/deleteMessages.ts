@@ -1,11 +1,11 @@
 import axios from "axios";
-import { batchDelete } from "../data/endpoints.json";
 import renderAlert from "./renderAlert";
 import getHeaders from "./getHeaders";
 
 export default async function deleteMessages(
   messageIdArray: string[],
-  token: string
+  token: string,
+  userId: string
 ) {
   const headers = getHeaders(token);
 
@@ -17,7 +17,7 @@ export default async function deleteMessages(
 
   try {
     const response = await axios.post(
-      batchDelete,
+      `https://gmail.googleapis.com/gmail/v1/users/${userId}/messages/batchDelete`,
       { ids: messageIdArray },
       {
         headers,

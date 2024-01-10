@@ -1,5 +1,6 @@
 import { useState } from "react";
-import handleAuth from "../services/google-authentication/handleAuth";
+import { handleLogin } from "../services/supabase/supabase.ts";
+
 import google from "../assets/icons/google.svg";
 import faq from "../data/faq.ts";
 
@@ -68,7 +69,7 @@ function Login({ loading, setLoading }: LoginProps): JSX.Element {
           <Button
             onClick={() => {
               setLoading(true);
-              handleAuth();
+              handleLogin();
             }}
             text={"Login with Google"}
             icon={google}

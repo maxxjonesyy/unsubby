@@ -1,12 +1,11 @@
 import axios from "axios";
-import endpoints from "../data/endpoints.json";
 import formatLink from "./formatLink.ts";
 import renderAlert from "./renderAlert";
 import getHeaders from "./getHeaders.ts";
 
 import { MessageObjectType } from "../types/types";
 
-async function fetchMessageIDs(token: string) {
+async function fetchMessageIDs(token: string, userId: string) {
   const MAX_RESULTS = 400;
   const QUERY_STRING = "Unsubscribe";
 
@@ -18,7 +17,10 @@ async function fetchMessageIDs(token: string) {
   };
 
   try {
-    const response = await axios.get(endpoints.messages, { headers, params });
+    const response = await axios.get(
+      `https://gmail.googleapis.com/gmail/v1/users/${userId}/messages/`,
+      { headers, params }
+    );
 
     if (response.status === 200 && response.data.messages) {
       const { messages } = response.data;
@@ -30,8 +32,8 @@ async function fetchMessageIDs(token: string) {
   }
 }
 
-async function fetchMessages(token: string) {
-  const messageIdArray = await fetchMessageIDs(token);
+async function fetchMessages(token: string, userId: string) {
+  const messageIdArray = await fetchMessageIDs(token, userId);
 
   const headers = getHeaders(token);
 
@@ -43,9 +45,13 @@ async function fetchMessages(token: string) {
 
   const messagePromises = messageIdArray.map(async (messageId: string) => {
     try {
-      const response = await axios.get(endpoints.messages + messageId, {
-        headers,
-      });
+      const response = await axios.get(
+        `https://gmail.googleapis.com/gmail/v1/users/${userId}/messages/` +
+          messageId,
+        {
+          headers,
+        }
+      );
 
       if (response.status === 200 && response.data) {
         const { payload, id } = response.data;
