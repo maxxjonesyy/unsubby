@@ -17,17 +17,17 @@ function App() {
         if (session) {
           localStorage.setItem("token", session?.provider_token as string);
           localStorage.setItem("user", JSON.stringify(session?.user));
+
+          navigate("/home");
         } else {
           renderAlert("error", "Error logging in");
         }
-
-        navigate("/home");
-      } else if (event === "SIGNED_OUT" || !user) {
+      } else if (event === "SIGNED_OUT") {
         localStorage.clear();
         navigate("/");
       }
     });
-  }, [user, navigate]);
+  }, [user]);
 
   return (
     <>
