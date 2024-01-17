@@ -2,11 +2,13 @@ import axios from "axios";
 import formatLink from "./formatLink.ts";
 import renderAlert from "./renderAlert";
 import getHeaders from "./getHeaders.ts";
+import getEmail from "./getEmail.ts";
 
 import { MessageObjectType } from "../types/types";
+import { getSubscriptions } from "../services/supabase/supabase.ts";
 
 async function fetchMessageIDs(token: string, userId: string) {
-  const MAX_RESULTS = 400;
+  const MAX_RESULTS = 300;
   const QUERY_STRING = "Unsubscribe";
 
   const headers = getHeaders(token);
@@ -78,15 +80,30 @@ async function fetchMessages(token: string, userId: string) {
   });
 
   const exists: Set<string> = new Set();
+  const dbEmails = await getSubscriptions();
 
-  const messageArray = (await Promise.all(messagePromises)).filter((item) => {
-    const email = item.name?.split("<")[1].slice(0, -1).toLowerCase();
+  const [messageArray] = await Promise.all([
+    Promise.all(messagePromises).then((items) =>
+      items.filter((item) => {
+        const email = getEmail(item.name) as string | undefined;
 
-    if (!exists.has(email) && item.webUrl && item !== undefined) {
-      exists.add(email);
-      return item;
-    }
-  });
+        if (
+          dbEmails &&
+          email !== undefined &&
+          !exists.has(email) &&
+          item.webUrl
+        ) {
+          exists.add(email);
+          return item;
+        } else {
+          if (email !== undefined && !exists.has(email) && item.webUrl) {
+            exists.add(email);
+            return item;
+          }
+        }
+      })
+    ),
+  ]);
 
   return messageArray;
 }
