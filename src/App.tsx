@@ -27,7 +27,7 @@ function App() {
         navigate("/");
       }
     });
-  }, [user]);
+  }, []);
 
   return (
     <>
