@@ -7,7 +7,8 @@ import Swal from "sweetalert2";
 import Button from "../components/Button";
 
 import { MessageObjectType } from "../types/types";
-import { handleLogout } from "../services/supabase/supabase";
+import { addSubscriptions, handleLogout } from "../services/supabase/supabase";
+import getEmail from "../utils/getEmail";
 
 interface HomeProps {
   user: any;
@@ -35,8 +36,8 @@ function Home({ user }: HomeProps) {
         setMessages(messages);
       }
     } catch (error) {
-      renderAlert("error", `There was an error fetching messages: ${error}`);
-      console.error("error", `There was an error fetching messages: ${error}`);
+      renderAlert("error", "There was an error fetching messages");
+      console.error("error", "There was an error fetching messages");
     } finally {
       setLoading(false);
     }
@@ -81,6 +82,12 @@ function Home({ user }: HomeProps) {
     }).then((result) => {
       if (result.isConfirmed) {
         handleDelete(result);
+
+        const emailsFromIds: any = messages
+          ?.filter((message) => checkedIds.includes(message.id))
+          .map((message) => getEmail(message.name || ""));
+
+        addSubscriptions(user, emailsFromIds ? emailsFromIds : []);
       }
     });
   }
@@ -182,10 +189,7 @@ function Home({ user }: HomeProps) {
           <tbody>
             {messages?.map((message, index) => {
               const name = message.name?.split("<")[0].replace(/"/g, "");
-              const email = message.name
-                ?.split("<")[1]
-                .slice(0, -1)
-                .toLowerCase();
+              const email = getEmail(message.name || "");
               const webUrl = message?.webUrl;
 
               return (
