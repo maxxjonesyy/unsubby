@@ -64,6 +64,7 @@ async function fetchMessages(token: string, userId: string) {
         headers.find((item: { name: string; value: string }) => {
           if (item.name === "From") {
             tempObject.name = item.value;
+            tempObject.email = getEmail(item.value) as string;
           } else if (item.name === "List-Unsubscribe") {
             const cleanLink = formatLink(item.value);
 
@@ -85,7 +86,7 @@ async function fetchMessages(token: string, userId: string) {
   const [messageArray] = await Promise.all([
     Promise.all(messagePromises).then((items) =>
       items.filter((item) => {
-        const email = getEmail(item.name) as string;
+        const email = item?.email;
 
         if (
           dbEmails &&

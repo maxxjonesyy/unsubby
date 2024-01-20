@@ -84,7 +84,7 @@ function Home({ user }: HomeProps) {
 
         const emailsFromIds: any = messages
           ?.filter((message) => checkedIds.includes(message.id))
-          .map((message) => getEmail(message.name || ""));
+          .map((message) => message.email);
 
         addSubscriptions(user, emailsFromIds ? emailsFromIds : []);
       }
