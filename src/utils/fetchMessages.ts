@@ -4,7 +4,7 @@ import renderAlert from "./renderAlert";
 import getHeaders from "./getHeaders.ts";
 import getEmail from "./getEmail.ts";
 
-import { MessageObjectType } from "../types/types";
+import { MessageObject } from "../types/types";
 import { getSubscriptions } from "../services/supabase/supabase.ts";
 
 async function fetchMessageIDs(token: string, userId: string) {
@@ -59,7 +59,7 @@ async function fetchMessages(token: string, userId: string) {
         const { payload, id } = response.data;
         const { headers } = payload;
 
-        const tempObject: MessageObjectType = { id: id };
+        const tempObject: MessageObject = { id };
 
         headers.find((item: { name: string; value: string }) => {
           if (item.name === "From") {
@@ -85,7 +85,7 @@ async function fetchMessages(token: string, userId: string) {
   const [messageArray] = await Promise.all([
     Promise.all(messagePromises).then((items) =>
       items.filter((item) => {
-        const email = getEmail(item.name) as string | undefined;
+        const email = getEmail(item.name) as string;
 
         if (
           dbEmails &&

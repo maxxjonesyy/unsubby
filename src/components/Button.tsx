@@ -1,11 +1,5 @@
 import Loader from "./Loader";
-
-interface ButtonProps {
-  onClick?: () => void;
-  text: string;
-  icon?: string;
-  loading?: boolean;
-}
+import { ButtonProps } from "../types/types";
 
 const Button: React.FC<ButtonProps> = ({
   onClick,

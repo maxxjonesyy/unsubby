@@ -1,14 +1,13 @@
 import { useState } from "react";
 import fetchMessages from "../utils/fetchMessages";
 import deleteMessages from "../utils/deleteMessages";
+import getEmail from "../utils/getEmail";
 import renderAlert from "../utils/renderAlert";
 import Swal from "sweetalert2";
-
 import Button from "../components/Button";
 
-import { MessageObjectType } from "../types/types";
+import { MessageObject } from "../types/types";
 import { addSubscriptions, handleLogout } from "../services/supabase/supabase";
-import getEmail from "../utils/getEmail";
 
 interface HomeProps {
   user: any;
@@ -19,7 +18,7 @@ interface DeleteResult {
 }
 
 function Home({ user }: HomeProps) {
-  const [messages, setMessages] = useState<MessageObjectType[]>();
+  const [messages, setMessages] = useState<MessageObject[]>();
   const [checkedIds, setCheckedIds] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const { token } = localStorage;
