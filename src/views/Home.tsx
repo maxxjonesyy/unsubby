@@ -3,6 +3,7 @@ import fetchMessages from "../utils/fetchMessages";
 import deleteMessages from "../utils/deleteMessages";
 import renderAlert from "../utils/renderAlert";
 import Swal from "sweetalert2";
+
 import Button from "../components/Button";
 
 import { MessageObject } from "../types/types";
@@ -16,10 +17,6 @@ interface HomeProps {
   user: any;
 }
 
-interface DeleteResult {
-  isConfirmed: boolean;
-}
-
 function Home({ user }: HomeProps) {
   const [messages, setMessages] = useState<MessageObject[]>();
   const [checkedIds, setCheckedIds] = useState<string[]>([]);
@@ -31,6 +28,7 @@ function Home({ user }: HomeProps) {
     if (messages) {
       setMessages([]);
     }
+
     try {
       const messages = await fetchMessages(
         token,
@@ -102,7 +100,7 @@ function Home({ user }: HomeProps) {
     });
   }
 
-  async function handleDelete(result: DeleteResult) {
+  async function handleDelete(result: { isConfirmed: boolean }) {
     setLoading(true);
     try {
       if (result.isConfirmed) {
