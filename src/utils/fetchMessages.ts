@@ -5,7 +5,6 @@ import getHeaders from "./getHeaders.ts";
 import getEmail from "./getEmail.ts";
 
 import { MessageObject } from "../types/types";
-import { getSubscriptions } from "../services/supabase/supabase.ts";
 
 async function fetchMessageIDs(token: string, userId: string) {
   const MAX_RESULTS = 300;
@@ -81,26 +80,15 @@ async function fetchMessages(token: string, userId: string) {
   });
 
   const exists: Set<string> = new Set();
-  const dbEmails = await getSubscriptions();
 
   const [messageArray] = await Promise.all([
     Promise.all(messagePromises).then((items) =>
       items.filter((item) => {
         const email = item?.email;
 
-        if (
-          dbEmails &&
-          email !== undefined &&
-          !exists.has(email) &&
-          item.webUrl
-        ) {
+        if (email !== undefined && !exists.has(email) && item.webUrl) {
           exists.add(email);
           return item;
-        } else {
-          if (email !== undefined && !exists.has(email) && item.webUrl) {
-            exists.add(email);
-            return item;
-          }
         }
       })
     ),

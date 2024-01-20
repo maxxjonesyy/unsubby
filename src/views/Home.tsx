@@ -1,13 +1,16 @@
 import { useState } from "react";
 import fetchMessages from "../utils/fetchMessages";
 import deleteMessages from "../utils/deleteMessages";
-import getEmail from "../utils/getEmail";
 import renderAlert from "../utils/renderAlert";
 import Swal from "sweetalert2";
 import Button from "../components/Button";
 
 import { MessageObject } from "../types/types";
-import { addSubscriptions, handleLogout } from "../services/supabase/supabase";
+import {
+  addSubscriptions,
+  getSubscriptions,
+  handleLogout,
+} from "../services/supabase/supabase";
 
 interface HomeProps {
   user: any;
@@ -32,7 +35,12 @@ function Home({ user }: HomeProps) {
       );
 
       if (messages) {
-        setMessages(messages);
+        const dbEmails = await getSubscriptions();
+        const filteredEmails = messages.filter(
+          (message) => !dbEmails.includes(message.email)
+        );
+
+        setMessages(filteredEmails);
       }
     } catch (error) {
       renderAlert("error", "There was an error fetching messages");
@@ -188,7 +196,7 @@ function Home({ user }: HomeProps) {
           <tbody>
             {messages?.map((message, index) => {
               const name = message.name?.split("<")[0].replace(/"/g, "");
-              const email = getEmail(message.name || "");
+              const email = message.email;
               const webUrl = message?.webUrl;
 
               return (
