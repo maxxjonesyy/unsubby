@@ -28,6 +28,9 @@ function Home({ user }: HomeProps) {
 
   async function handleFetchMessages() {
     setLoading(true);
+    if (messages) {
+      setMessages([]);
+    }
     try {
       const messages = await fetchMessages(
         token,
