@@ -137,7 +137,7 @@ function Home({ user }: HomeProps) {
         <img
           src={user?.user_metadata.picture}
           alt='user'
-          className='rounded-full w-20 shadow-lg border border-slate-500'
+          className='rounded-full w-20 shadow-lg'
         />
       </div>
 
@@ -168,7 +168,7 @@ function Home({ user }: HomeProps) {
         />
       )}
 
-      <div className='absolute top-5 right-5'>
+      <div className='absolute top-5 right-5 flex items-center gap-4'>
         <Button onClick={handleLogout} text='Logout' />
       </div>
 
