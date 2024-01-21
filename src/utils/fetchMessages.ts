@@ -27,9 +27,11 @@ async function fetchMessageIDs(token: string, userId: string) {
       const { messages } = response.data;
       return messages.map((message: { id: string }) => message.id);
     }
-  } catch (error) {
-    renderAlert("error", `There was an error fetching message ids: ${error}`);
-    console.error("error", `There was an error fetching message ids: ${error}`);
+  } catch (error: any) {
+    if (error.code === "ERR_BAD_REQUEST") {
+      renderAlert("error", "Invalid token: Please log in again.");
+    } else
+      renderAlert("error", `There was an error fetching message ids: ${error}`);
   }
 }
 
@@ -38,9 +40,8 @@ async function fetchMessages(token: string, userId: string) {
 
   const headers = getHeaders(token);
 
-  if (messageIdArray.length === 0) {
+  if (Array.isArray(messageIdArray) && messageIdArray.length === 0) {
     renderAlert("error", "No messages found");
-    console.error("error", "No messages found");
     return [];
   }
 
@@ -75,7 +76,6 @@ async function fetchMessages(token: string, userId: string) {
       }
     } catch (error) {
       renderAlert("error", `There was an error fetching messages: ${error}`);
-      console.error("error", `There was an error fetching messages: ${error}`);
     }
   });
 

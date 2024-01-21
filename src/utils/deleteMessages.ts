@@ -11,7 +11,6 @@ export default async function deleteMessages(
 
   if (messageIdArray.length === 0) {
     renderAlert("error", "No messages to delete");
-    console.error("error", "No messages to delete");
     return;
   }
 
@@ -27,6 +26,5 @@ export default async function deleteMessages(
     return response.data;
   } catch (error) {
     renderAlert("error", `Error deleting messages: ${error}`);
-    console.error("error", `Error deleting messages: ${error}`);
   }
 }

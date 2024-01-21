@@ -25,27 +25,26 @@ function Home({ user }: HomeProps) {
 
   async function handleFetchMessages() {
     setLoading(true);
+
     if (messages) {
       setMessages([]);
     }
 
     try {
-      const messages = await fetchMessages(
+      const fetchedMessages = await fetchMessages(
         token,
         user.user_metadata.provider_id
       );
 
-      if (messages) {
+      if (fetchedMessages) {
         const dbEmails = await getSubscriptions();
-        const filteredEmails = messages.filter(
+        const filteredEmails = fetchedMessages.filter(
           (message) => !dbEmails.includes(message.email)
         );
-
         setMessages(filteredEmails);
       }
     } catch (error) {
-      renderAlert("error", "There was an error fetching messages");
-      console.error("error", "There was an error fetching messages");
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -122,10 +121,6 @@ function Home({ user }: HomeProps) {
       }
     } catch (error) {
       renderAlert(
-        "error",
-        `There was an error deleting your messages: ${error}`
-      );
-      console.error(
         "error",
         `There was an error deleting your messages: ${error}`
       );
