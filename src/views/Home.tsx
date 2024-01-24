@@ -22,7 +22,7 @@ function Home({ user }: HomeProps) {
   const [checkedIds, setCheckedIds] = useState<string[]>([]);
   const [dbEmails, setDbEmails] = useState<string[]>();
   const [loading, setLoading] = useState<boolean>(false);
-  const { token } = localStorage;
+  const { token } = sessionStorage;
 
   useEffect(() => {
     async function storeDbEmails() {
@@ -152,7 +152,7 @@ function Home({ user }: HomeProps) {
       className='relative min-h-screen py-10 px-5 w-full flex flex-col gap-5 items-center justify-center'>
       <div className='flex items-center gap-5'>
         <img
-          src={user?.user_metadata.picture}
+          src={user.user_metadata.avatar_url}
           alt='user'
           className='rounded-full w-20 shadow-lg'
         />

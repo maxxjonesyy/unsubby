@@ -7,7 +7,7 @@ import Login from "./views/Login";
 import Home from "./views/Home";
 
 function App() {
-  const user = JSON.parse(localStorage.getItem("user") as string);
+  const user = JSON.parse(sessionStorage.getItem("user") as string);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -15,15 +15,15 @@ function App() {
     supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_IN") {
         if (session) {
-          localStorage.setItem("token", session?.provider_token as string);
-          localStorage.setItem("user", JSON.stringify(session?.user));
+          sessionStorage.setItem("token", session?.provider_token as string);
+          sessionStorage.setItem("user", JSON.stringify(session?.user));
 
           navigate("/home");
         } else {
           renderAlert("error", "Error logging in");
         }
       } else if (event === "SIGNED_OUT") {
-        localStorage.clear();
+        sessionStorage.clear();
         navigate("/");
       }
     });

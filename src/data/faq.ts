@@ -12,7 +12,7 @@ const faq = [
   {
     question: "Do we store your data?",
     answer:
-      "We don't store any personal data in our database. We only store your list of subscriptions, everything else you can find within your localStorage (browser)",
+      "We don't store any personal data in our database. We only store your list of subscriptions, everything else you can find within your sessionStorage (browser) which is deleted each time you close your tab.",
   },
   {
     question: "Why am I getting an error?",
