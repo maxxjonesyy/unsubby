@@ -7,7 +7,7 @@ import getEmail from "./getEmail.ts";
 import { MessageObject } from "../types/types";
 
 async function fetchMessageIDs(token: string, userId: string) {
-  const MAX_RESULTS = 300;
+  const MAX_RESULTS = 400;
   const QUERY_STRING = "Unsubscribe";
 
   const headers = getHeaders(token);
