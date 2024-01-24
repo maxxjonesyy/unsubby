@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import fetchMessages from "../utils/fetchMessages";
 import deleteMessages from "../utils/deleteMessages";
 import renderAlert from "../utils/renderAlert";
@@ -20,8 +20,21 @@ interface HomeProps {
 function Home({ user }: HomeProps) {
   const [messages, setMessages] = useState<MessageObject[]>();
   const [checkedIds, setCheckedIds] = useState<string[]>([]);
+  const [dbEmails, setDbEmails] = useState<string[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const { token } = localStorage;
+
+  useEffect(() => {
+    async function storeDbEmails() {
+      const emails = await getSubscriptions();
+
+      if (!emails) return;
+
+      setDbEmails(emails);
+    }
+
+    storeDbEmails();
+  }, []);
 
   async function handleFetchMessages() {
     setLoading(true);
@@ -37,11 +50,15 @@ function Home({ user }: HomeProps) {
       );
 
       if (fetchedMessages) {
-        const dbEmails = await getSubscriptions();
-        const filteredEmails = fetchedMessages.filter(
-          (message) => !dbEmails.includes(message.email)
-        );
-        setMessages(filteredEmails);
+        const filteredEmails = dbEmails
+          ? fetchedMessages.filter(
+              (message) => !dbEmails.includes(message.email)
+            )
+          : [];
+
+        filteredEmails.length > 0
+          ? setMessages(filteredEmails)
+          : setMessages(fetchedMessages);
       }
     } catch (error) {
       console.error(error);
