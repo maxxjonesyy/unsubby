@@ -240,7 +240,7 @@ function Home({ user }: HomeProps) {
                         href={webUrl}
                         target='_blank'
                         onClick={() => checkedIds.push(message.id)}>
-                        <button className='font-bold  bg-gradient-to-r from-violet-600 via-blue-600 to-violet-600 animate-text rounded-lg text-transparent shadow-lg bg-clip-text'>
+                        <button className='font-bold gradient-text'>
                           View Link
                         </button>
                       </a>

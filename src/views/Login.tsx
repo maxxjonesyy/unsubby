@@ -35,7 +35,7 @@ function Login({ loading, setLoading }: LoginProps): JSX.Element {
 
   return (
     <div className='min-h-screen w-full flex flex-col items-center justify-center gap-5'>
-      <h1 className='font-black text-6xl bg-gradient-to-r from-violet-600 via-blue-600 to-violet-600 animate-text rounded-lg text-transparent shadow-lg bg-clip-text'>
+      <h1 className='font-black text-6xl gradient-text'>
         Unsubby
       </h1>
 
@@ -85,7 +85,7 @@ function Login({ loading, setLoading }: LoginProps): JSX.Element {
               id='question'
               className='relative overflow-hidden mt-5 border rounded-md hover:cursor-pointer'>
               <div className='flex w-full justify-between'>
-                <button className='text-xl p-3 bg-gradient-to-r from-violet-600 via-blue-600 to-violet-600 animate-text rounded-lg text-transparent shadow-lg bg-clip-text'>
+                <button className='text-xl p-3 gradient-text'>
                   {item.question}
                 </button>
                 <img
