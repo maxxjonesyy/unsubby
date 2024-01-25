@@ -36,6 +36,19 @@ function Home({ user }: HomeProps) {
     storeDbEmails();
   }, []);
 
+  (() => {
+    if(dbEmails && !sessionStorage.statsHasRun) {
+      Swal.fire({
+        title: `Welcome back ${user.user_metadata.name.split(" ")[0]}!`,
+        text: `Total subscriptions removed: ${dbEmails.length}`,
+        confirmButtonText: "Continue",
+        confirmButtonColor: '#3085d6',
+      }); 
+      
+      sessionStorage.setItem('statsHasRun', JSON.stringify(true));
+    } 
+  })();
+
   async function handleFetchMessages() {
     setLoading(true);
 
@@ -188,6 +201,7 @@ function Home({ user }: HomeProps) {
       <div className='absolute top-5 right-5 flex items-center gap-4'>
         <Button onClick={handleLogout} text='Logout' />
       </div>
+
 
       {messages && messages.length > 0 && (
         <table className='w-full transition-all lg:w-2/3 lg:max-w-[1000px]'>
