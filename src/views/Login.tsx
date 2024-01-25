@@ -78,7 +78,6 @@ function Login({ loading, setLoading }: LoginProps): JSX.Element {
         </>
       ) : (
         <div className='w-full p-5 lg:w-2/3 max-w-[900px] transition-all duration-300'>
-          <a href="https://www.termsfeed.com/live/13a0fa4a-7f0e-4e66-b095-f92faa2eabb0" target="_blank" className="font-bold text-lg underline">View our Privacy Policy</a>
           {faq.map((item, index) => (
             <div
               onClick={() => handleInfoClick(index)}
