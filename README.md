@@ -2,6 +2,10 @@
 
 Unsubby groups together unsubscribe links for Gmail, making it easy for you to identify and remove subscribed emails with just a few clicks.
 
+## Can I get access?
+
+***You can view a live demo of this project over on my [personal portfolio](https://maxwelljonesdev.com/). Alternatively, if you would like access please email me (maxxjonesyy@gmail.com) and I will add you to the test users.***
+
 ## Tech Used 💻
 
 - Typescript
@@ -12,4 +16,4 @@ Unsubby groups together unsubscribe links for Gmail, making it easy for you to i
 
 ## Screenshots
 
-<img src="https://github.com/maxxjonesyy/unsubby_ts/assets/73814371/d2dc7bb6-eb1a-4dec-a85a-370b82f04946" width="550px">
+<img src="https://github.com/maxxjonesyy/unsubby/assets/73814371/f18d49b4-b4d9-4a9d-a05a-208dcbb20475" width="550px">
