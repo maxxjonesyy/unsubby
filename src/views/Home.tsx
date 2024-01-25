@@ -110,7 +110,7 @@ function Home({ user }: HomeProps) {
   async function batchDelete() {
     Swal.fire({
       title: "Are you sure?",
-      text: "This will remove all selected emails from your inbox",
+      text: "This will remove the selected emails from your inbox.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -179,8 +179,8 @@ function Home({ user }: HomeProps) {
       </p>
 
       {messages && messages.length > 0 && (
-        <p className='border p-2 rounded-md'>
-          Subscriptions found: {messages.length}
+        <p className='font-bold p-2 rounded-md'>
+        <span className="text-lg text-red-500">{messages.length}</span> subscriptions were found.
         </p>
       )}
 
@@ -216,7 +216,7 @@ function Home({ user }: HomeProps) {
                 />
               </th>
               <th className='text-lg px-5 py-3 text-left'>Name</th>
-              <th className='text-lg px-5 py-3 text-center'>Unsubscribe</th>
+              <th className='text-lg px-5 py-3 text-center'>Link</th>
             </tr>
           </thead>
 
@@ -255,7 +255,7 @@ function Home({ user }: HomeProps) {
                         target='_blank'
                         onClick={() => checkedIds.push(message.id)}>
                         <button className='font-bold gradient-text'>
-                          View Link
+                          Unsubscribe
                         </button>
                       </a>
                     ) : null}
