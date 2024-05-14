@@ -7,7 +7,7 @@ import getEmail from "./getEmail.ts";
 import { MessageObject } from "../types/types";
 
 async function fetchMessageIDs(token: string, userId: string) {
-  const MAX_RESULTS = 400;
+  const MAX_RESULTS = 150;
   const QUERY_STRING = "Unsubscribe";
 
   const headers = getHeaders(token);
@@ -76,7 +76,7 @@ async function fetchMessages(token: string, userId: string) {
         return tempObject;
       }
     } catch (error) {
-      renderAlert("error", `There was an error fetching messages: ${error}`);
+      console.error(error);
     }
   });
 
