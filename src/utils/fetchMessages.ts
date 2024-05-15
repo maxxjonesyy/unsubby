@@ -15,7 +15,7 @@ async function fetchMessageIDs(token: string, userId: string) {
   const params = {
     maxResults: MAX_RESULTS,
     q: QUERY_STRING,
-    includeSpamTrash: false,
+    includeSpamTrash: true,
   };
 
   try {
