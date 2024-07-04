@@ -1,6 +1,6 @@
 # Unsubby
 
-Unsubby groups together unsubscribe links for Gmail, making it easy for you to identify and remove subscribed emails with just a few clicks.
+Unsubby groups together unsubscribe links from your Gmail inbox, making it easy for you to identify and remove pesky subscriptions with just a few clicks.
 
 ## Can I get access?
 
