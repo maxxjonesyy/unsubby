@@ -4,7 +4,7 @@ Unsubby groups together unsubscribe links from your Gmail inbox, making it easy 
 
 ## Can I get access?
 
-***You can view a live demo of this project over on my [personal portfolio](https://maxwelljonesdev.com/). Alternatively, if you would like access please email me (maxxjonesyy@gmail.com) and I will add you to the test users.***
+***If you would like access please email me (maxxjonesyy@gmail.com) and I will add you to the test users.***
 
 ## Tech Used 💻
 
